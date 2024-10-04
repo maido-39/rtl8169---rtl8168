@@ -87,13 +87,13 @@ Change Interface
 auto lo
 iface lo inet loopback
 
-iface enx8eea5477f7ee inet manual  # this is my default mobile -> usb interface
+iface enx8eea5477f7ee inet manual  # this is my default mobile -> usb interface can be removed
 
 auto vmbr0
 iface vmbr0 inet static
         address 192.168.1.140/24
         gateway 192.168.1.1
-        bridge-ports enx8eea5477f7ee enp2s0 # -> enp2s0 was added
+        bridge-ports enx8eea5477f7ee enp2s0 # -> enp2s0 was added, enx8eea5477f7ee can be removed
         bridge-stp off
         bridge-fd 0
 
@@ -107,10 +107,14 @@ auto enp2s0
 iface enp2s0 inet manual
 ```
 
-If we are connecting via tethering you should change the gateway ip address to one that will be supported by your network devices. You should also update the file
+If we are connecting via tethering like me you should change the gateway ip address to one that will be supported by your network devices. You should also update the file
 
 ```
 nano /etc/hosts
+```
+dns can be change here:
+```
+nano /etc/resolv.conf
 ```
 
 and update address
