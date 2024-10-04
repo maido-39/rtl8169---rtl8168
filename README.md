@@ -1,4 +1,5 @@
 ## Instructions how to fix realtek rtl8111 8168 8411 pciexpress gigabit ethernet controller - proxmox-ve_8.2-2
+## In My case Mini PC SOYO M2PLUS 16 GB RAM, 512 GB, Intel Celeron N100
 
 ### 1. Connect usb-lan adapter or mobile (with enable USB tethering) to USB, monitor by HDMI and boot from USB
 Download [Proxmox VE ISO Installer](https://www.proxmox.com/en/downloads/proxmox-virtual-environment/iso "Proxmox VE ISO Installer") and prepare a USB  by [balenaEtcher](https://etcher.balena.io/#download-etcher "balenaEtcher"), after that boot from USB
