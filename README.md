@@ -1,3 +1,5 @@
+## 2024-11-10 `EDIT BY maido-39` : i have several problems, so i made little bit modification to this guide
+
 ## Instructions how to fix realtek rtl8111 8168 8411 pciexpress gigabit ethernet controller - proxmox-ve_8.2-2
 ## In My case Mini PC SOYO M2PLUS 16 GB RAM, 512 GB, Intel Celeron N100
 
@@ -15,31 +17,37 @@ nano /etc/apt/sources.list
 
 Modify your file to:
 ```
-deb http://ftp.pl.debian.org/debian bookworm main contrib non-free non-free-firmware
+deb http://ftp.jp.debian.org/debian bookworm main contrib non-free non-free-firmware
 
-deb http://ftp.pl.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
+deb http://ftp.jp.debian.org/debian bookworm-updates main contrib non-free non-free-firmware
 
 # security updates
 deb http://security.debian.org bookworm-security main contrib
 deb http://download.proxmox.com/debian/pve bookworm pve-no-subscription
 
-# add testing repo
-deb http://deb.debian.org/debian testing main contrib non-free non-free-firmware
+
 ```
 Update repository
 ```apt update```
 
 Install tools to build and compilations
 
-```apt install build-essential pve-headers dkms```
+```apt install -y build-essential pve-headers dkms```
 
-Install driver
+Install driver (REF : https://forum.proxmox.com/threads/unable-to-install-r8168-dkms-for-realtek-nic.137727/)
 
-```apt install r8168-dkms```
+```
+wget https://github.com/nathanhi/r8168/releases/download/pve8%2F8.053.00-1-bpo12/r8168-dkms_8.053.00-1-bpo12_all.deb
+dpkg --force-depends -i r8168-dkms_8.053.00-1-bpo12_all.deb
+proxmox-boot-tool kernel unpin
+reboot
+```
 
+(Continue after reboot)
 Blacklist r8169 
 
 ```echo "blacklist r8169" >> /etc/modprobe.d/blacklist.conf```
+
 Remove module
 ```rmmod r8169```
 
@@ -49,6 +57,12 @@ Load r8168
 Check is driver loaded
 ```lsmod | grep r8168```
 
+- you should see like this
+```
+root@pve:~# lsmod | grep r8168
+r8168                 667648  0
+```
+
 ```lspci -k```
 02:00.0 Ethernet controller: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller (rev 2b)
 	Subsystem: Realtek Semiconductor Co., Ltd. RTL8111/8168/8411 PCI Express Gigabit Ethernet Controller
@@ -56,7 +70,6 @@ Check is driver loaded
 	Kernel modules: r8168
 
 See new ethernet interface
-
 ```ip a```
 
 ```root@proxmox:~# ip a
